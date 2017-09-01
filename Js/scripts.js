@@ -14,15 +14,16 @@ var months = [
     'Июль',
     'Август',
     'Сентябрь',
+    'Октябрь',
     'Ноябрь',
     'Декабрь'
 ];
-var data = 'data='+JSON.stringify({
-    "date": date.getDate(),
-    "month": (date.getMonth()) + 1
-});
+var data = 'data=' + JSON.stringify({
+        "date": date.getDate(),
+        "month": (date.getMonth()) + 1
+    });
 //=======================Text Today=======================\\
-takeText(data,"#page-today");
+takeText(data, "#page-today");
 
 $('body').on('click', '.textToggle', function () { //Code for opening-closing text on all pages
     $(this).toggleClass('textToggle__underline');
@@ -30,7 +31,7 @@ $('body').on('click', '.textToggle', function () { //Code for opening-closing te
     $(this).next().slideToggle();
 });
 //=======================Calendar=======================\\
-$('.calendar-head').html("<span class='calendar-month'>" + months[date.getMonth() - 1] + "</span><span class='calendar-year'>" + date.getFullYear() + "</span>");
+$('.calendar-head').html("<span class='calendar-month'>" + months[date.getMonth()] + "</span><span class='calendar-year'>" + date.getFullYear() + "</span>");
 
 $('.calendar-date:first-child').css("margin-left", 5 + (45 * (firstDayMonth - 1)) + "px");//Calculation of offset the first day in the calendar
 
@@ -41,6 +42,25 @@ if (daysInMonth < 31) {//Hiding excess days in the calendar
 }
 
 $(".calendar-date:nth-child(" + date.getDate() + ")").addClass("calendar-date__today");//Mark up today in the caledar
+
+$(".calendar-date").click(function () {
+    $('#dateInput-loader').removeClass('events__hidden'); //Do loader visible
+    $('#page-anotherDay .events div').addClass('events__hidden'); //Hide text
+
+    $(".menu-item").removeClass("menu-item__active");
+    $('#btn-anotherDay').addClass("menu-item__active");
+
+    $(".wrapper").addClass('wrapper__hidden');
+    $("#page-anotherDay").removeClass('wrapper__hidden');
+
+    var data = {
+        "date": $(this).data('day'),
+        "month": (date.getMonth()) + 1
+    };
+    $('#dateInput-month').val(data.month);
+    $('#dateInput-day').val(data.date);
+    takeText('data=' + JSON.stringify(data), "#page-anotherDay");
+});
 //=======================Pages=======================\\
 $('.menu-item').click(function () {
     $(".menu-item").removeClass("menu-item__active");
@@ -57,9 +77,9 @@ $('.menu-item').click(function () {
         // case "btn-submit": TODO
         //     $("#page-submit").removeClass('wrapper__hidden');
         //     break;
-        case "btn-about":
-            $("#page-about").removeClass('wrapper__hidden');
-            break;
+        // case "btn-about": TODO
+        //     $("#page-about").removeClass('wrapper__hidden');
+        //     break;
         default:
             alert('Ой, чтото пошло не так. Страница будет перезагружена.');
             location.reload();
@@ -68,19 +88,21 @@ $('.menu-item').click(function () {
 
 //=======================Page Another day=======================\\
 $(".dateInput input").on('input', function () {
-    $('#dateInput-loader').removeClass('events__hidden'); //Do loader visible
-    $('#page-anotherDay .events div').addClass('events__hidden'); //Hide text
 
-    var inputMonth = parseInt($('#dateInput-month').val());
-    var inputDay = $('#dateInput-day').val();
-    var daysInMonth = 33 - new Date(2012, inputMonth, 33).getDate();//Learning how many days is in month
+    var inputMonth = parseInt($('#dateInput-month').val()),// January - 0, December - 11
+        inputDay = $('#dateInput-day').val(),
+        daysInMonth = 33 - new Date(2012, inputMonth - 1, 33).getDate(),//Learning how many days is in month
+        data;
     if (inputMonth > 0 && inputMonth < 13) {// Watching in errors in month
-        if (inputDay > 0 && inputDay < daysInMonth) {//And in days
-            var data = 'data='+JSON.stringify({
-                "date": inputDay,
-                "month": inputMonth
-            });
-            takeText(data,"#page-anotherDay");
+        if (inputDay > 0 && inputDay <= daysInMonth) {//And in days
+            $('#dateInput-loader').removeClass('events__hidden'); //Do loader visible
+            $('#page-anotherDay .events div').addClass('events__hidden'); //Hide text
+
+            data = 'data=' + JSON.stringify({
+                    "date": inputDay,
+                    "month": inputMonth
+                });
+            takeText(data, "#page-anotherDay");
         } else {
             if (inputDay < 1) $('#dateInput-day').val("1");
             else $('#dateInput-day').val(daysInMonth);
@@ -101,15 +123,14 @@ function takeText(data, selector) { //data: JSON string with day and month, sele
         data: data,
         success: function (res) {
             res = JSON.parse(res);
-
             //==TODO arrow inactive
-            if (res['strNational'] !="" && res['strNational'] != null) $(selector + ' .events-national').html(" <h2 class='textToggle '>Национальные праздники <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2>" + res['strNational']);
+            if (res['strNational'] != "" && res['strNational'] != null) $(selector + ' .events-national').html(" <h2 class='textToggle '>Национальные праздники <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2>" + res['strNational']);
             else $(selector + ' .events-national').html("");
 
             if (res['strProfessional'] != "" && res['strProfessional'] != null) $(selector + ' .events-professional').html("<h2 class='textToggle '>Профессиональные праздники <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2>" + res['strProfessional']);
             else $(selector + ' .events-professional').html("");
 
-            if (res['strInternational'] != "" && res['strInternational'] != null) $(selector + ' .events-international').html("<h2 class='textToggle '>Профессиональные праздники <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2> " + res['strInternational']);
+            if (res['strInternational'] != "" && res['strInternational'] != null) $(selector + ' .events-international').html("<h2 class='textToggle '>Международные праздники <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2> " + res['strInternational']);
             else $(selector + ' .events-international').html("");
 
             $(selector + ' .events-history').html("<h2 class='textToggle'>Исторические события <i class=\"fa fa-caret-square-o-down\" aria-hidden=\"true\"></i></h2><div class='events-history-text'>" + res['strEvents'] + "</div>");
@@ -117,6 +138,6 @@ function takeText(data, selector) { //data: JSON string with day and month, sele
             $(selector + ' .textToggle').next().slideUp(1);//Hide text
 
             $(selector + ' .events').contents().toggleClass('events__hidden')//Hide loader and do visible text
-        }
+        },
     });
 }

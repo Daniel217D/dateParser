@@ -12,8 +12,8 @@
 <ul class="menu clearfix">
     <li class="menu-item menu-item__active" id="btn-today">Сегодняшние события</li>
     <li class="menu-item" id="btn-anotherDay">Выбрать другую дату</li>
-    <li class="menu-item" id="btn-submit" style="display: none">Рассылка</li> <!--TODO-->
-    <li class="menu-item" id="btn-about">О проекте</li>
+    <!--<li class="menu-item" id="btn-submit" style="display: none">Рассылка</li> TODO-->
+<!--    <li class="menu-item" id="btn-about">О проекте</li> TODO-->
 </ul>
 <div class="wrapper wrapper-today" id="page-today">
 
@@ -74,10 +74,10 @@
 
     <form class="dateInput">
         <label for="dateInput-day" class="dateInput-day__label">Введите день: </label>
-        <input type="number" class="dateInput-day" id="dateInput-day" name="dateInput-day" value="1" max="31" min="1"
+        <input type="number" class="dateInput-day" id="dateInput-day" name="dateInput-day" value="1"  min="1"
                maxlength="2">
         <label for="dateInput-month" class="dateInput-month__label">Введите месяц: </label>
-        <input type="number" class="dateInput-month" id="dateInput-month" name="dateInput-month" value="1" max="12"
+        <input type="number" class="dateInput-month" id="dateInput-month" name="dateInput-month" value="1"
                min="1" maxlength="2">
     </form>
     <div class="events">
@@ -88,10 +88,10 @@
         <div class="events-history events__hidden"></div>
     </div>
 </div>
-<!--TODO <div class="wrapper wrapper__hidden" id="page-submit">3</div> -->
-<div class="wrapper wrapper__hidden" id="page-about">
+<!-- <div class="wrapper wrapper__hidden" id="page-submit">3</div> TODO -->
+<!--<div class="wrapper wrapper__hidden" id="page-about">
     <h2>Страница о проекте</h2>
-</div>
+</div>TODO-->
 <script type="text/javascript" src="Libs/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="Js/scripts.js"></script>
 </body>

@@ -2,31 +2,8 @@
 if (!$_POST['data'] == "") {
     $data = json_decode($_POST["data"], true);
 
-    $str = file_get_contents("../pages/" . $data['date'] . "_" . $data['month'] . ".php", true);
-    preg_match("'<h3>.*?Национальные.*?</h3>.*?</ul>'", $str, $strNational);
-    preg_match_all("'<ul>.*?</ul>'", $strNational[0], $strNational);
-    $strNational = $strNational[0][count($strNational[0]) - 1]; //BUGFIX
-
-    preg_match("'<h3>.*?Профессиональные.*?</h3>.*?</ul>'", $str, $strProfessional);
-    preg_match_all("'<ul>.*?</ul>'", $strProfessional[0], $strProfessional);
-    $strProfessional = preg_replace("'<>'", "<>", $strProfessional[0][count($strProfessional[0]) - 1]); //BUGFIX
-
-    preg_match("'<h3>.*?Международные.*?</h3>.*?</ul>'", $str, $strInternational);
-    preg_match_all("'<ul>.*?</ul>'", $strInternational[0], $strInternational);
-    $strInternational = preg_replace("'<>'", "<>", $strInternational[0][count($strInternational[0]) - 1]); //BUGFIX
-
-    $str = strip_tags($str,'<h1><h2><h3><h4><h5><h6><ul><li><a><img>');
-    preg_match("'</ul><h2>.*?События.*?</h2>.*?<h2>'", $str, $strEvents);
-    $strEvents = $strEvents[0]; //BUGFIX
-    $strEvents = preg_replace("'<h2>.*?</h2>'", "", $strEvents); // Full deleting h2 tags
-
-    $returnArray = array(
-        "strNational" => $strNational,
-        "strProfessional" => $strProfessional,
-        "strInternational" => $strInternational,
-        "strEvents" => $strEvents
-    );
-    echo json_encode($returnArray);
+//    print_r($data);
+    include_once ("../pages/" . $data['date'] . "_" . $data['month'] . ".php");
 } else {
     echo "Выйди и зайди нормально";
 }

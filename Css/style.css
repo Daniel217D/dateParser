@@ -149,6 +149,7 @@ li {
     color: #f1f1f1;
     background-color: #216eff;
     border-radius: 35%;
+    cursor: pointer;
 }
 
 .calendar-date:hover {
