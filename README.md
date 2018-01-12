@@ -1,5 +1,5 @@
 # Date parser 
-[site](http://daniil217.site/dateParser/)
+[site](https://pithecoid-safety.000webhostapp.com/)
   
   it's cool one-page site, where you can find interesting information about today - celebrations and event what happened today in history
 
